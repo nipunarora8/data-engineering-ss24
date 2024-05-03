@@ -8,6 +8,7 @@
 // No further data validation is required, do not drop any rows or change any data points
 // Use Jayvee version 0.4.0
 // Submit as  /exercises/exercise1.jv
+// To run this, run command jv exercise1.jv
 
 pipeline AirportsPipeline {
 
