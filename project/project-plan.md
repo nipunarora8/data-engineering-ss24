@@ -6,7 +6,7 @@
 ## Main Question
 
 <!-- Think about one main question you want to answer based on the data. -->
-1. How did the amount of pollutants change through the years?
+1. How did the amount of pollutants change through the years and how is pollution and weather closely related?
 
 ## Description
 
@@ -18,10 +18,13 @@ We will look into other data sources as well to analyse this situation in detail
 
 <!-- Describe each datasources you plan to use in a section. Use the prefic "DatasourceX" where X is the id of the datasource. -->
 
-### Datasource1: ExampleSource
+### Datasource1: Kaggle - Air Quality Data
 * Kaggle URL: https://www.kaggle.com/datasets/abhisheksjha/time-series-air-quality-data-of-india-2010-2023
 * Data Type: CSV's
 
+### Datasource2: Kaggle - Weather Data
+* Kaggle URL: https://www.kaggle.com/datasets/vanvalkenberg/historicalweatherdataforindiancities
+* Data Type: CSV's
 
 ## Work Packages
 
