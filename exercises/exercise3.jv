@@ -1,0 +1,104 @@
+// 1. This project outlines a pipeline that processes a CSV file from the web 
+//    and converts it into a SQLite database, with specific data constraints as described in the exercise instructions.
+//    The metadata for the data source is available at https://mobilithek.info/offers/-94981960701408443
+// 2. The pipeline structure is defined by specifying the blocks involved.
+// 3. The blocks used in the pipeline are described after defining the structure.
+// 4. German Umlauts are handled through appropriate encoding settings.
+// 5. The CSV file uses a semicolon (;) as the delimiter.
+// 6. The first 8 rows are removed from the table as they are unnecessary.
+// 7. Columns from E to AR are deleted to clean up the data.
+// 8. The schema for the SQLite table is defined to organize the data.
+// 9. A SQLite file is created using the defined schema.
+// 10. Various constraints are applied to the columns to ensure data integrity.
+// 11. A constraint is applied to ensure that the "Month" column contains only German month names.
+// 12. A constraint is applied to ensure all integer entries are positive values.
+// 13. A constraint is applied to ensure that the "goods_id" column contains values in the format NST7-XXX.
+
+pipeline GoodsPipeline {
+    
+    GoodsHttpExtractor
+        -> GoodsTextFileInterpreter
+        -> GoodsCSVInterpreter
+        -> GoodsRowsDeleter;
+
+    GoodsRowsDeleter
+        -> GoodsColumnDeleter
+        -> GoodsTableInterpreter
+        -> GoodsSQLiteLoader;
+
+    block GoodsHttpExtractor oftype HttpExtractor {
+        url: "https://www-genesis.destatis.de/genesis/downloads/00/tables/46131-0014_00.csv";
+    }
+
+    block GoodsTextFileInterpreter oftype TextFileInterpreter {
+        encoding: "latin2";
+    }
+
+    block GoodsCSVInterpreter oftype CSVInterpreter { 
+        delimiter: ";";
+    
+    }
+
+    block GoodsRowsDeleter oftype RowDeleter {
+        delete: [row 1,row 2,row 3,row 4,row 5,row 6,row 7,row 8];
+    }
+
+    block GoodsColumnDeleter oftype ColumnDeleter {
+        delete: [column F,column G,column H,column I,column J,column K,
+        column L,column M,column N,column O,column P,column Q,
+        column R,column S,column T,column U,column V,column W,
+        column X,column Y,column Z,column AA,column AB,column AC,
+        column AD,column AE,column AF,column AG,column AH,column AI,
+        column AJ,column AK,column AL,column AM,column AN,column AO,
+        column AP,column AQ,column AR,column AS];
+    }
+
+    block GoodsTableInterpreter oftype TableInterpreter {
+        header: false;
+        columns: [
+
+            "year" oftype PositiveInteger,
+            "month" oftype ValidMonths,
+            "goods_id" oftype OnlyValidIds,
+            "goods_name" oftype text,
+            "goods_source" oftype text,
+            "abroad" oftype PositiveInteger,
+            "total" oftype PositiveInteger,
+        ];
+    }
+
+    block GoodsSQLiteLoader oftype SQLiteLoader {
+        table: "goods";
+        file: "./goodsTransportedByTrain.sqlite";
+    }
+
+}
+    valuetype ValidMonths oftype text {
+        constraints: [
+            OnlyValidMonthList,
+        ];
+    }
+
+    valuetype OnlyValidIds oftype text {
+        constraints: [
+            OnlyValidIdsList,
+        ];
+    }
+
+    valuetype PositiveInteger oftype integer {
+        constraints: [
+            OnlyValidNumbers,
+        ];
+    }
+
+    constraint OnlyValidMonthList on text:
+        value in ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+
+    constraint OnlyValidNumbers on integer:
+        value >= 0;
+
+    constraint OnlyValidIdsList on text:
+       value matches /^NST7-[A-Z0-9]{3}$/;
+
+
+
