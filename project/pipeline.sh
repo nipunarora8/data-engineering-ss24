@@ -1,3 +1,4 @@
 #!/bin/bash
 pip3 install kaggle
-python3 ./pipeline.py
+python pipeline.py
+python preprocessing.py

@@ -13,8 +13,11 @@ dataset2 = 'vanvalkenberg/historicalweatherdataforindiancities'
 folder1 = f"../data/{dataset1.split('/')[-1]}/"
 folder2 = f"../data/{dataset2.split('/')[-1]}/"
 
-os.mkdir(folder1)
-os.mkdir(folder2)
+if not os.path.exists(folder1):
+    os.mkdir(folder1)
+if not os.path.exists(folder2):
+    os.mkdir(folder2)
+
 print('Folders created at /data')
 
 print('Downloading Datasets')
