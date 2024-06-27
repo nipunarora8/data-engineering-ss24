@@ -8,6 +8,9 @@ print()
 
 data_files = glob.glob('../data/*')
 
+for i in data_files:
+    print(i)
+
 files1 = files2 = files3 = all_files = False
 if '../data/time-series-air-quality-data-of-india-2010-2023' == data_files[0]:
         if len(glob.glob('../data/time-series-air-quality-data-of-india-2010-2023/*')) == 454:
