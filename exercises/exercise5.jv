@@ -1,0 +1,78 @@
+// This pipeline is designed to automate the extraction, transformation, 
+// and loading of GTFS stops data into an SQLite database. 
+// The pipeline fetches data from the URL, processes it to retain only the necessary columns, filters the stops based on the specified 
+// zone, validates the data, and then loads the cleaned data into an SQLite database table named "stops".
+
+// Steps:
+// 1. Extract the GTFS data from the URL.
+// 2. Select the stops.txt file from the downloaded data.
+// 3. Interpret the file as a CSV with the appropriate delimiter and encoding.
+// 4. Delete unnecessary columns from the data.
+// 5. Interpret the remaining data, ensuring proper data types and constraints are applied.
+// 6. Load the cleaned and validated data into an SQLite database.
+// 7. The resulting data is stored in an SQLite database file named "gtfs.sqlite" within a table named "stops".
+
+pipeline Pipeline {
+
+    CSVInterpreter
+        -> ColDeleter
+        -> TableInterpreter
+        -> SQLLoader;
+
+    Extractor
+        -> FilePicker
+        -> TextFileInterpreter
+        -> CSVInterpreter;
+
+    block Extractor oftype GTFSExtractor {
+        url: "https://gtfs.rhoenenergie-bus.de/GTFS.zip";
+    }
+
+    block TextFileInterpreter oftype TextFileInterpreter {
+        encoding: "utf8";
+    }
+
+    block CSVInterpreter oftype CSVInterpreter { 
+        delimiter: ",";
+        enclosing: '"';
+    
+    }
+    
+    block FilePicker oftype FilePicker {
+        path: "/stops.txt";
+    }
+
+    block ColDeleter oftype ColumnDeleter{
+        delete: [column B,column D,column H,column I,column J,column K,
+        column L];
+    }
+
+    valuetype zoneid oftype integer {
+        constraints: [
+            ValidZone,
+        ];
+    }   
+
+    constraint ValidZone on integer:
+        value == 1645;
+
+
+    block TableInterpreter oftype TableInterpreter {
+        header: false;
+        columns: [
+            "stop_id" oftype integer,
+            "stop_name" oftype text,
+            "stop_lat" oftype decimal,
+            "stop_lon" oftype decimal,
+            "zone_id" oftype zoneid,
+
+        ];
+    }
+
+    block SQLLoader oftype SQLiteLoader {
+        table: "stops";
+        file: "gtfs.sqlite";
+    }
+
+}
+
