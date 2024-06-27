@@ -4,8 +4,8 @@ import os
 
 print('Running Preprocessing.py')
 
-dataset1 = './data/historicalweatherdataforindiancities/Temperature_And_Precipitation_Cities_IN/'
-dataset2 = './data/time-series-air-quality-data-of-india-2010-2023/'
+dataset1 = '../data/historicalweatherdataforindiancities/Temperature_And_Precipitation_Cities_IN/'
+dataset2 = '../data/time-series-air-quality-data-of-india-2010-2023/'
 
 files_in_dataset1 = glob.glob(f'{dataset1}*')
 files_in_dataset2 = glob.glob(f'{dataset2}*')
@@ -134,15 +134,15 @@ jodhpur1['date'] = pd.to_datetime(jodhpur1['date'])
 jodhpur2['date'] = pd.to_datetime(jodhpur2['date'])
 jodhpur_merged = pd.merge(jodhpur1, jodhpur2, on='date')
 
-if not os.path.exists('./data/city_wise_csv'):
-    os.mkdir('./data/city_wise_csv')
+if not os.path.exists('../data/city_wise_csv'):
+    os.mkdir('../data/city_wise_csv')
 
-delhi_merged.to_csv('./data/city_wise_csv/delhi_merged.csv',index=False)
-mumbai_merged.to_csv('./data/city_wise_csv/mumbai_merged.csv',index=False)
-chennai_merged.to_csv('./data/city_wise_csv/chennai_merged.csv',index=False)
-bangalore_merged.to_csv('./data/city_wise_csv/bangalore_merged.csv',index=False)
-lucknow_merged.to_csv('./data/city_wise_csv/lucknow_merged.csv',index=False)
-jodhpur_merged.to_csv('./data/city_wise_csv/jodhpur_merged.csv',index=False)
+delhi_merged.to_csv('../data/city_wise_csv/delhi_merged.csv',index=False)
+mumbai_merged.to_csv('../data/city_wise_csv/mumbai_merged.csv',index=False)
+chennai_merged.to_csv('../data/city_wise_csv/chennai_merged.csv',index=False)
+bangalore_merged.to_csv('../data/city_wise_csv/bangalore_merged.csv',index=False)
+lucknow_merged.to_csv('../data/city_wise_csv/lucknow_merged.csv',index=False)
+jodhpur_merged.to_csv('../data/city_wise_csv/jodhpur_merged.csv',index=False)
 
-print('Saved files at ./data/city_wise_csv')
+print('Saved files at ../data/city_wise_csv')
 print()
