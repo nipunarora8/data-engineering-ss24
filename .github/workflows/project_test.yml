@@ -1,0 +1,28 @@
+name: Project Test on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  execute-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Set execute permissions and run tests
+        run: |
+          cd project
+          chmod +x test.sh
+          ./test.sh
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
