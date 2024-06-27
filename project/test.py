@@ -8,25 +8,22 @@ print()
 
 data_files = glob.glob('../data/*')
 
-for i in data_files:
-    print(i)
-
 files1 = files2 = files3 = all_files = False
-if '../data/time-series-air-quality-data-of-india-2010-2023' == data_files[0]:
+if '../data/time-series-air-quality-data-of-india-2010-2023' in data_files:
         if len(glob.glob('../data/time-series-air-quality-data-of-india-2010-2023/*')) == 454:
             files1 = True
             print('Data Files 1 Exists')
 else:
     print('Files 1 not found')
             
-if '../data/historicalweatherdataforindiancities' == data_files[2]:
+if '../data/historicalweatherdataforindiancities' in data_files:
         if len(glob.glob('../data/historicalweatherdataforindiancities/Temperature_And_Precipitation_Cities_IN/*')) == 9:
             files2 = True
             print('Data Files 2 Exists')
 else:
     print('Files 2 not found')
 
-if '../data/city_wise_csv' == data_files[1]:
+if '../data/city_wise_csv' in data_files:
         if len(glob.glob('../data/city_wise_csv/*')) == 6:
             files3 = True
             print('Preprocessed and Merged Files Exists')
